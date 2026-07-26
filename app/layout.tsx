@@ -18,6 +18,16 @@ export const metadata: Metadata = {
   title: 'L’Écrin — Institut de beauté au Raincy (93)',
   description:
     'Soins visage, épilation, manucure et massages dans un cocon de douceur au Raincy. Site de démonstration NEX-WEB.',
+  metadataBase: new URL('https://demo-beaute.nex-web.fr'),
+  openGraph: {
+    title: 'L’Écrin — Institut de beauté au Raincy (93)',
+    description:
+      'Soins visage, épilation, manucure et massages dans un cocon de douceur. Site de démonstration NEX-WEB.',
+    type: 'website',
+    locale: 'fr_FR',
+    url: 'https://demo-beaute.nex-web.fr',
+  },
+  twitter: { card: 'summary_large_image' },
   robots: { index: false, follow: false }, // démo : pas d'indexation
 }
 
