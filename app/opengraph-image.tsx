@@ -7,108 +7,23 @@ export const contentType = 'image/png'
 export default async function Image() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          background: '#FAF6F0',
-          backgroundImage:
-            'radial-gradient(circle at 88% 12%, rgba(201,138,125,0.22), transparent 42%)',
-          padding: 70,
-          fontFamily: 'sans-serif',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              fontSize: 44,
-              fontWeight: 600,
-              color: '#4A3B36',
-              letterSpacing: 1,
-            }}
-          >
-            L’Écrin
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              fontSize: 18,
-              color: '#FAF6F0',
-              background: '#C98A7D',
-              borderRadius: 999,
-              padding: '10px 20px',
-              fontWeight: 600,
-            }}
-          >
-            SITE DE DÉMONSTRATION
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div
-            style={{
-              display: 'flex',
-              fontSize: 22,
-              color: '#C98A7D',
-              letterSpacing: 6,
-              marginBottom: 22,
-            }}
-          >
-            INSTITUT DE BEAUTÉ · LE RAINCY
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              fontSize: 78,
-              fontWeight: 600,
-              color: '#4A3B36',
-              lineHeight: 1.05,
-            }}
-          >
-            Prenez soin de vous,
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              fontSize: 78,
-              fontWeight: 600,
-              color: '#C98A7D',
-              lineHeight: 1.05,
-              fontStyle: 'italic',
-            }}
-          >
-            vraiment.
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {['Soins visage', 'Épilation', 'Manucure', 'Massages'].map((t) => (
-            <div
-              key={t}
-              style={{
-                display: 'flex',
-                fontSize: 22,
-                color: '#4A3B36',
-                background: '#FFFFFF',
-                border: '1px solid rgba(201,138,125,0.35)',
-                borderRadius: 999,
-                padding: '12px 26px',
-                marginRight: 14,
-              }}
-            >
-              {t}
+      <div style={{ width: '100%', height: '100%', display: 'flex', background: '#FBF8F3', color: '#2B2522', fontFamily: 'serif' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 64, width: 760 }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', width: 56, height: 56, borderRadius: 999, background: '#2E3F36', marginRight: 16 }} />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', fontSize: 34, fontWeight: 500 }}>L’Écrin</div>
+              <div style={{ display: 'flex', fontSize: 14, letterSpacing: 5, color: '#C4715A', fontFamily: 'sans-serif' }}>INSTITUT DE BEAUTÉ · LE RAINCY</div>
             </div>
-          ))}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', fontSize: 68, lineHeight: 1.05, fontWeight: 400 }}>Prenez soin de vous,</div>
+            <div style={{ display: 'flex', fontSize: 68, lineHeight: 1.05, fontStyle: 'italic', color: '#C4715A' }}>vraiment.</div>
+            <div style={{ display: 'flex', fontSize: 22, marginTop: 22, color: '#7A6E68', fontFamily: 'sans-serif' }}>Réservation en ligne · Cartes cadeaux · Soins visage, corps, regard</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', background: '#F3ECE2' }}>
+          <div style={{ display: 'flex', width: 300, height: 420, borderRadius: '150px 150px 24px 24px', background: '#E6D3C5', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 30, fontSize: 20, color: '#2E3F36', fontFamily: 'sans-serif', letterSpacing: 4 }}>DEPUIS 2015</div>
         </div>
       </div>
     ),
