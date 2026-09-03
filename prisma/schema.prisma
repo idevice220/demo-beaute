@@ -1,0 +1,149 @@
+// L'Écrin (démo NEX-WEB) — schéma Prisma, PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model Meta {
+  id        Int      @id
+  lastReset DateTime
+  seededAt  DateTime @default(now())
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  name      String
+  mime      String
+  size      Int
+  width     Int
+  height    Int
+  data      Bytes
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id      Int     @id @default(autoincrement())
+  name    String
+  image   String
+  blurb   String
+  order   Int     @default(0)
+  visible Boolean @default(true)
+  soins   Soin[]
+}
+
+model Soin {
+  id         Int      @id @default(autoincrement())
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name       String
+  desc       String   @default("")
+  min        Int
+  price      Float
+  signature  Boolean  @default(false)
+  isNew      Boolean  @default(false)
+  order      Int      @default(0)
+  visible    Boolean  @default(true)
+
+  @@index([categoryId])
+}
+
+model Rituel {
+  id      Int      @id @default(autoincrement())
+  name    String
+  sub     String
+  min     Int
+  price   Float
+  was     Float?
+  items   String[]
+  image   String
+  order   Int      @default(0)
+  visible Boolean  @default(true)
+}
+
+model TeamMember {
+  id      Int     @id @default(autoincrement())
+  name    String
+  role    String
+  spec    String
+  image   String
+  years   Int
+  order   Int     @default(0)
+  visible Boolean @default(true)
+}
+
+model GalleryItem {
+  id      Int     @id @default(autoincrement())
+  src     String
+  alt     String
+  tall    Boolean @default(false)
+  order   Int     @default(0)
+  visible Boolean @default(true)
+}
+
+model Review {
+  id      Int     @id @default(autoincrement())
+  name    String
+  date    String
+  text    String
+  soin    String
+  rating  Int     @default(5)
+  order   Int     @default(0)
+  visible Boolean @default(true)
+}
+
+model FaqItem {
+  id      Int     @id @default(autoincrement())
+  q       String
+  a       String
+  order   Int     @default(0)
+  visible Boolean @default(true)
+}
+
+/// Rendez-vous pris en ligne
+model Booking {
+  id        Int      @id @default(autoincrement())
+  item      String
+  staff     String
+  date      String // AAAA-MM-JJ
+  time      String // HH:MM
+  duration  Int
+  price     Float
+  name      String
+  email     String
+  phone     String
+  note      String?
+  status    String   @default("confirmed") // confirmed | done | cancelled
+  createdAt DateTime @default(now())
+
+  @@index([date])
+}
+
+/// Commandes de cartes cadeaux
+model GiftOrder {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  to        String
+  from      String
+  message   String?
+  mode      String // email | ecrin
+  status    String   @default("new") // new | sent
+  createdAt DateTime @default(now())
+}
+
+/// Inscrits à la lettre d'information
+model Subscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}

@@ -2,21 +2,21 @@
 
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
-import { FAQ } from '@/lib/data'
+import type { FaqItem } from '@prisma/client'
 import { SectionHeading } from './Section'
 import { Reveal } from './Reveal'
 
-export function Faq() {
+export function Faq({ items }: { items: FaqItem[] }) {
   const [open, setOpen] = useState<number | null>(0)
   return (
     <section id="faq" className="py-20 lg:py-28">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[0.8fr_1.2fr]">
         <SectionHeading eyebrow="Questions" title={<>Tout ce qu’on nous <em className="italic text-terra">demande.</em></>} />
         <Reveal className="divide-y hairline border-y">
-          {FAQ.map((f, i) => {
+          {items.map((f, i) => {
             const on = open === i
             return (
-              <div key={f.q}>
+              <div key={f.id}>
                 <button onClick={() => setOpen(on ? null : i)} aria-expanded={on} className="flex w-full items-center justify-between gap-4 py-5 text-left">
                   <span className="font-display text-2xl">{f.q}</span>
                   <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all ${on ? 'rotate-45 border-terra bg-terra text-cream' : 'hairline'}`}><Plus size={16} /></span>

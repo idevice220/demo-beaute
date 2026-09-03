@@ -1,0 +1,20 @@
+/** Photos livrées avec le site, proposées dans la photothèque. */
+export const BUNDLED_IMAGES: { url: string; name: string }[] = [
+  { url: '/images/hero.jpg', name: 'Ambiance de l’institut (accueil)' },
+  { url: '/images/visage.jpg', name: 'Soin visage' },
+  { url: '/images/corps.jpg', name: 'Massage' },
+  { url: '/images/epilation.jpg', name: 'Épilation' },
+  { url: '/images/mains.jpg', name: 'Manucure' },
+  { url: '/images/regard.jpg', name: 'Regard' },
+  { url: '/images/team-1.jpg', name: 'Portrait 1' },
+  { url: '/images/team-2.jpg', name: 'Portrait 2' },
+  { url: '/images/team-3.jpg', name: 'Portrait 3' },
+  { url: '/images/gal-1.jpg', name: 'Bougies et serviettes' },
+  { url: '/images/gal-2.jpg', name: 'Produits de soin' },
+  { url: '/images/gal-3.jpg', name: 'Détail de la cabine' },
+  { url: '/images/gal-4.jpg', name: 'Nuancier de vernis' },
+  { url: '/images/gal-5.jpg', name: 'Pierres chaudes' },
+  { url: '/images/gal-6.jpg', name: 'Fleurs à l’accueil' },
+  { url: '/images/gal-7.jpg', name: 'Masque visage' },
+  { url: '/images/gal-8.jpg', name: 'Instant de détente' },
+]

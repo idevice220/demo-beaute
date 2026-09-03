@@ -3,31 +3,41 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Gift, Mail, Package, Sparkles } from 'lucide-react'
-import { GIFT_AMOUNTS } from '@/lib/data'
 import { SectionHeading } from './Section'
 import { Reveal } from './Reveal'
 
-export function CarteCadeau() {
-  const [amount, setAmount] = useState(80)
+export function CarteCadeau({ amounts }: { amounts: number[] }) {
+  const list = amounts.length ? amounts : [50, 80, 120, 150]
+  const [amount, setAmount] = useState(list[1] ?? list[0])
   const [custom, setCustom] = useState('')
   const [to, setTo] = useState('')
   const [from, setFrom] = useState('')
   const [msg, setMsg] = useState('')
   const [mode, setMode] = useState<'email' | 'ecrin'>('email')
+  const [sending, setSending] = useState(false)
   const value = custom ? Math.max(20, Math.min(500, Number(custom) || 0)) : amount
 
-  function order(e: React.FormEvent) {
+  async function order(e: React.FormEvent) {
     e.preventDefault()
-    toast.success(`Carte cadeau de ${value} € pour ${to || 'votre proche'} prête à être envoyée. (démo : paiement non activé)`)
+    setSending(true)
+    try {
+      const res = await fetch('/api/gifts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount: value, to, from, message: msg, mode }) })
+      if (!res.ok) throw new Error()
+      toast.success(`Carte cadeau de ${value} € pour ${to || 'votre proche'} commandée. Elle apparaît dans l’espace propriétaire de la démo (paiement non activé).`)
+      setTo(''); setFrom(''); setMsg('')
+    } catch {
+      toast.error('Commande impossible, réessayez.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
     <section id="cadeau" className="overflow-hidden bg-terra-tint/50 py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-4">
-        <SectionHeading eyebrow="Cartes cadeaux" title={<>Offrez un moment, <em className="italic text-terra">pas un objet.</em></>} subtitle="Choisissez le montant, personnalisez le message : la carte est envoyée par e-mail en 2 minutes, ou glissée dans un écrin à retirer à l’institut." />
+        <SectionHeading eyebrow="Cartes cadeaux" title={<>Offrez un moment, <em className="italic text-terra">pas un objet.</em></>} subtitle="Choisissez le montant, personnalisez le message : la carte est envoyée par e-mail en 2 minutes, ou glissée dans un écrin à retirer à l’institut." />
 
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          {/* aperçu en direct */}
           <Reveal>
             <div className="relative mx-auto w-full max-w-md">
               <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-nude/60 blur-2xl" aria-hidden />
@@ -51,7 +61,7 @@ export function CarteCadeau() {
               <div>
                 <span className="eyebrow block text-muted">Montant</span>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {GIFT_AMOUNTS.map((a) => (
+                  {list.map((a) => (
                     <button type="button" key={a} onClick={() => { setAmount(a); setCustom('') }} className={`rounded-full border px-4 py-2 text-sm font-medium ${!custom && amount === a ? 'border-forest bg-forest text-cream' : 'hairline hover:border-terra'}`}>{a} €</button>
                   ))}
                   <input value={custom} onChange={(e) => setCustom(e.target.value.replace(/\D/g, ''))} inputMode="numeric" placeholder="Autre" className="w-24 rounded-full border hairline bg-cream px-4 py-2 text-sm outline-none focus:border-terra" />
@@ -70,7 +80,7 @@ export function CarteCadeau() {
                   )
                 })}
               </div>
-              <button className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-terra px-6 py-4 text-[15px] font-medium text-cream transition-colors hover:bg-forest"><Gift size={17} /> Offrir {value} € <Sparkles size={15} /></button>
+              <button disabled={sending} className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-terra px-6 py-4 text-[15px] font-medium text-cream transition-colors hover:bg-forest disabled:opacity-60"><Gift size={17} /> {sending ? 'Commande…' : `Offrir ${value} €`} <Sparkles size={15} /></button>
             </form>
           </Reveal>
         </div>

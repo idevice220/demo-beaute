@@ -1,17 +1,21 @@
 import Image from 'next/image'
-import { TEAM } from '@/lib/data'
+import type { TeamT } from '@/lib/content'
 import { SectionHeading } from './Section'
 import { Reveal } from './Reveal'
 import { BookButton } from './BookButton'
 
-export function Equipe() {
+const WORDS = ['Une', 'Deux', 'Trois', 'Quatre', 'Cinq', 'Six']
+
+export function Equipe({ team }: { team: TeamT[] }) {
+  if (!team.length) return null
+  const n = team.length
   return (
     <section id="equipe" className="bg-sand py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-4">
-        <SectionHeading align="center" eyebrow="L’équipe" title={<>Trois praticiennes, <em className="italic text-terra">une même exigence.</em></>} subtitle="Diplômées, formées chaque année, et surtout à l’écoute. Vous pouvez choisir votre praticienne à la réservation." />
-        <div className="grid gap-8 sm:grid-cols-3">
-          {TEAM.map((t, i) => (
-            <Reveal key={t.name} delay={i * 100}>
+        <SectionHeading align="center" eyebrow="L’équipe" title={<>{n === 1 ? 'Une praticienne,' : `${WORDS[n - 1] ?? n} praticiennes,`} <em className="italic text-terra">une même exigence.</em></>} subtitle="Diplômées, formées chaque année, et surtout à l’écoute. Vous pouvez choisir votre praticienne à la réservation." />
+        <div className={`grid gap-8 ${n >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+          {team.map((t, i) => (
+            <Reveal key={t.id} delay={i * 100}>
               <div className="group text-center">
                 <div className="arch relative mx-auto aspect-[4/5] w-full max-w-[300px] overflow-hidden bg-sand-2">
                   <Image src={t.image} alt={`${t.name}, ${t.role}`} fill sizes="300px" className="object-cover transition-transform duration-700 group-hover:scale-105" />

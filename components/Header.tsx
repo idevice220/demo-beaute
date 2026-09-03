@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Phone, Menu, X, CalendarCheck } from 'lucide-react'
-import { BUSINESS } from '@/lib/data'
+import type { Site } from '@/lib/settings'
 import { openBooking } from './BookButton'
 
 const NAV = [
@@ -14,7 +14,7 @@ const NAV = [
   { label: 'Infos', href: '#infos' },
 ]
 
-export function Header() {
+export function Header({ site }: { site: Site }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
@@ -27,13 +27,13 @@ export function Header() {
   return (
     <header className={`sticky top-0 z-50 border-b transition-all ${scrolled ? 'hairline bg-cream/90 shadow-soft backdrop-blur' : 'border-transparent bg-transparent'}`}>
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-4">
-        <a href="#top" className="flex items-center gap-3" aria-label="L’Écrin, accueil">
+        <a href="#top" className="flex items-center gap-3" aria-label={`${site.name}, accueil`}>
           <span className="grid h-10 w-10 place-items-center rounded-full bg-forest">
             <span className="arch block h-5 w-4 bg-terra" />
           </span>
           <span className="leading-none">
-            <span className="block font-display text-[26px] font-medium tracking-tight text-ink">L’Écrin</span>
-            <span className="eyebrow block text-[9px] text-terra">Institut de beauté</span>
+            <span className="block font-display text-[26px] font-medium tracking-tight text-ink">{site.name}</span>
+            <span className="eyebrow block text-[9px] text-terra">{site.tagline}</span>
           </span>
         </a>
 
@@ -46,14 +46,14 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a href={BUSINESS.tel} className="hidden h-11 w-11 place-items-center rounded-full border hairline text-ink transition-colors hover:border-terra hover:text-terra sm:grid" aria-label={`Appeler ${BUSINESS.phone}`}>
+          <a href={site.tel} className="hidden h-11 w-11 place-items-center rounded-full border hairline text-ink transition-colors hover:border-terra hover:text-terra sm:grid" aria-label={`Appeler ${site.phone}`}>
             <Phone size={17} />
           </a>
           <button onClick={() => openBooking()} className="hidden items-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-terra sm:inline-flex">
             <CalendarCheck size={16} /> Réserver
           </button>
           <button onClick={() => setOpen((v) => !v)} className="grid h-11 w-11 place-items-center rounded-full border hairline lg:hidden" aria-label="Menu" aria-expanded={open}>
-            {open ? <X size={20} /> : <Menu size={20} />}
+            {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>

@@ -1,28 +1,32 @@
 import Image from 'next/image'
 import { Check, Clock, Gift } from 'lucide-react'
-import { RITUELS } from '@/lib/data'
+import type { RituelT } from '@/lib/content'
+import type { Site } from '@/lib/settings'
 import { SectionHeading } from './Section'
 import { Reveal } from './Reveal'
 import { BookButton } from './BookButton'
 import { Countdown } from './Countdown'
 
-export function Rituels() {
+export function Rituels({ rituels, offer }: { rituels: RituelT[]; offer: Site['offer'] }) {
+  if (!rituels.length) return null
   return (
     <section id="rituels" className="bg-forest py-20 text-cream lg:py-28">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <SectionHeading light eyebrow="Rituels signature" title={<>Nos moments <em className="italic text-nude">d’exception.</em></>} subtitle="Des parcours composés, à prix doux, pour s’offrir plus qu’un soin." />
-          <Reveal delay={100}>
-            <div className="mb-12 rounded-3xl border border-cream/15 bg-cream/5 px-6 py-5">
-              <p className="eyebrow text-nude">Offre du moment · −20 % sur les rituels</p>
-              <p className="mt-1 text-sm text-cream/70">Il reste</p>
-              <Countdown className="text-cream" />
-            </div>
-          </Reveal>
+          {offer.on && (
+            <Reveal delay={100}>
+              <div className="mb-12 rounded-3xl border border-cream/15 bg-cream/5 px-6 py-5">
+                <p className="eyebrow text-nude">{offer.text}</p>
+                <p className="mt-1 text-sm text-cream/70">Il reste</p>
+                <Countdown className="text-cream" />
+              </div>
+            </Reveal>
+          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {RITUELS.map((r, i) => (
+          {rituels.map((r, i) => (
             <Reveal key={r.id} delay={i * 90}>
               <article className="group flex h-full flex-col overflow-hidden rounded-3xl bg-cream text-ink shadow-lift">
                 <div className="relative aspect-[4/3] overflow-hidden">
@@ -39,10 +43,10 @@ export function Rituels() {
                   </ul>
                   <div className="mt-auto flex items-end justify-between pt-6">
                     <p>
-                      <span className="block text-xs text-muted line-through">{r.was} €</span>
-                      <span className="font-display text-4xl leading-none text-ink">{r.price}&nbsp;€</span>
+                      {r.was && <span className="block text-xs text-muted line-through">{r.was.toLocaleString('fr-FR')} €</span>}
+                      <span className="font-display text-4xl leading-none text-ink">{r.price.toLocaleString('fr-FR')}&nbsp;€</span>
                     </p>
-                    <BookButton soinId={r.id} className="inline-flex items-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-terra">
+                    <BookButton soinId={`r-${r.id}`} className="inline-flex items-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-terra">
                       Réserver
                     </BookButton>
                   </div>
