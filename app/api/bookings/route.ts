@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
-import { ensureFresh } from '@/lib/demo'
+import { getOrCreateTenant, QUOTA } from '@/lib/demo'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,16 +18,18 @@ const schema = z.object({
   note: z.string().trim().max(500).optional(),
 })
 
-/** Prise de rendez-vous depuis le site. Refuse un créneau déjà pris avec la même praticienne. */
+/** Prise de rendez-vous : dans la copie du visiteur (créée au besoin). Refuse un créneau déjà pris avec la même praticienne. */
 export async function POST(req: Request) {
-  await ensureFresh()
   const parsed = schema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return NextResponse.json({ error: 'Vérifiez le formulaire' }, { status: 400 })
   const d = parsed.data
+  const res = NextResponse.json({ ok: true }, { status: 201 })
+  const tenant = await getOrCreateTenant(res)
+  if ((await prisma.booking.count({ where: { tenant } })) >= QUOTA.inbox) return NextResponse.json({ error: 'Limite de réservations atteinte pour cette démo' }, { status: 429 })
   if (d.staff !== 'Sans préférence') {
-    const clash = await prisma.booking.findFirst({ where: { date: d.date, time: d.time, staff: d.staff, status: 'confirmed' } })
+    const clash = await prisma.booking.findFirst({ where: { tenant, date: d.date, time: d.time, staff: d.staff, status: 'confirmed' } })
     if (clash) return NextResponse.json({ error: 'Ce créneau vient d’être pris, choisissez-en un autre.' }, { status: 409 })
   }
-  const b = await prisma.booking.create({ data: { ...d, note: d.note || null } })
-  return NextResponse.json({ ok: true, id: b.id }, { status: 201 })
+  await prisma.booking.create({ data: { ...d, tenant, note: d.note || null } })
+  return res
 }

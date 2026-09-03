@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { ensureFresh, RESET_MINUTES } from '@/lib/demo'
+import { ensureBase, tenantAlive, TENANT_TTL_HOURS } from '@/lib/demo'
 import { AdminShell, type NavItem } from '@/components/admin/AdminShell'
 
 export const dynamic = 'force-dynamic'
@@ -9,11 +9,13 @@ export const dynamic = 'force-dynamic'
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession()
   if (!session) redirect('/admin/login')
-  const { lastReset } = await ensureFresh()
+  await ensureBase()
+  const tenant = await tenantAlive(session.tenant)
+  if (!tenant) redirect('/api/auth/expired')
   const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Paris' })).toISOString().slice(0, 10)
   const [upcoming, newGifts] = await Promise.all([
-    prisma.booking.count({ where: { status: 'confirmed', date: { gte: today } } }),
-    prisma.giftOrder.count({ where: { status: 'new' } }),
+    prisma.booking.count({ where: { tenant: tenant.id, status: 'confirmed', date: { gte: today } } }),
+    prisma.giftOrder.count({ where: { tenant: tenant.id, status: 'new' } }),
   ])
 
   const nav: NavItem[] = [
@@ -31,10 +33,9 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     { href: '/admin/photos', label: 'Photos', icon: 'Image', section: 'Institut' },
     { href: '/admin/reglages', label: 'Réglages & textes', icon: 'Settings', section: 'Institut' },
   ]
-  const resetAt = new Date(lastReset.getTime() + RESET_MINUTES * 60_000).toISOString()
 
   return (
-    <AdminShell brand={{ name: 'L’Écrin', sub: 'Espace propriétaire', initial: 'É' }} nav={nav} email={session.email} resetAt={resetAt}>
+    <AdminShell brand={{ name: 'L’Écrin', sub: 'Espace propriétaire', initial: 'É' }} nav={nav} email={session.email} tenantSince={tenant.createdAt.toISOString()} ttlHours={TENANT_TTL_HOURS}>
       {children}
     </AdminShell>
   )

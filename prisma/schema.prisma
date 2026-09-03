@@ -10,18 +10,30 @@ datasource db {
 }
 
 model Setting {
-  key       String   @id
+  tenant    String   @default("demo")
+  key       String
   value     String
   updatedAt DateTime @updatedAt
+
+  @@id([tenant, key])
 }
 
+/// Horodatages globaux (dernier nettoyage des copies expirées)
 model Meta {
   id        Int      @id
-  lastReset DateTime
-  seededAt  DateTime @default(now())
+  lastSweep DateTime @default(now())
+}
+
+/// Une copie de la démo : "demo" = version d'origine (lecture seule), sinon la copie privée d'un visiteur
+model Tenant {
+  id          String   @id
+  seedVersion String
+  createdAt   DateTime @default(now())
+  lastSeen    DateTime @default(now())
 }
 
 model Media {
+  tenant    String   @default("demo")
   id        String   @id @default(cuid())
   name      String
   mime      String
@@ -30,9 +42,12 @@ model Media {
   height    Int
   data      Bytes
   createdAt DateTime @default(now())
+
+  @@index([tenant])
 }
 
 model Category {
+  tenant  String  @default("demo")
   id      Int     @id @default(autoincrement())
   name    String
   image   String
@@ -40,9 +55,12 @@ model Category {
   order   Int     @default(0)
   visible Boolean @default(true)
   soins   Soin[]
+
+  @@index([tenant])
 }
 
 model Soin {
+  tenant     String   @default("demo")
   id         Int      @id @default(autoincrement())
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -56,9 +74,11 @@ model Soin {
   visible    Boolean  @default(true)
 
   @@index([categoryId])
+  @@index([tenant])
 }
 
 model Rituel {
+  tenant  String   @default("demo")
   id      Int      @id @default(autoincrement())
   name    String
   sub     String
@@ -69,9 +89,12 @@ model Rituel {
   image   String
   order   Int      @default(0)
   visible Boolean  @default(true)
+
+  @@index([tenant])
 }
 
 model TeamMember {
+  tenant  String  @default("demo")
   id      Int     @id @default(autoincrement())
   name    String
   role    String
@@ -80,18 +103,24 @@ model TeamMember {
   years   Int
   order   Int     @default(0)
   visible Boolean @default(true)
+
+  @@index([tenant])
 }
 
 model GalleryItem {
+  tenant  String  @default("demo")
   id      Int     @id @default(autoincrement())
   src     String
   alt     String
   tall    Boolean @default(false)
   order   Int     @default(0)
   visible Boolean @default(true)
+
+  @@index([tenant])
 }
 
 model Review {
+  tenant  String  @default("demo")
   id      Int     @id @default(autoincrement())
   name    String
   date    String
@@ -100,18 +129,24 @@ model Review {
   rating  Int     @default(5)
   order   Int     @default(0)
   visible Boolean @default(true)
+
+  @@index([tenant])
 }
 
 model FaqItem {
+  tenant  String  @default("demo")
   id      Int     @id @default(autoincrement())
   q       String
   a       String
   order   Int     @default(0)
   visible Boolean @default(true)
+
+  @@index([tenant])
 }
 
 /// Rendez-vous pris en ligne
 model Booking {
+  tenant    String   @default("demo")
   id        Int      @id @default(autoincrement())
   item      String
   staff     String
@@ -127,10 +162,12 @@ model Booking {
   createdAt DateTime @default(now())
 
   @@index([date])
+  @@index([tenant])
 }
 
 /// Commandes de cartes cadeaux
 model GiftOrder {
+  tenant    String   @default("demo")
   id        Int      @id @default(autoincrement())
   amount    Int
   to        String
@@ -139,11 +176,17 @@ model GiftOrder {
   mode      String // email | ecrin
   status    String   @default("new") // new | sent
   createdAt DateTime @default(now())
+
+  @@index([tenant])
 }
 
 /// Inscrits à la lettre d'information
 model Subscriber {
+  tenant    String   @default("demo")
   id        Int      @id @default(autoincrement())
-  email     String   @unique
+  email     String
   createdAt DateTime @default(now())
+
+  @@unique([tenant, email])
+  @@index([tenant])
 }

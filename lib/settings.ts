@@ -4,8 +4,8 @@ import { parseHoursConfig, toMap, hoursRows, type HoursConfigRow, type HoursMap,
 
 export type SettingsMap = Record<string, string>
 
-export async function getSettings(): Promise<SettingsMap> {
-  const rows = await prisma.setting.findMany()
+export async function getSettings(tenant: string): Promise<SettingsMap> {
+  const rows = await prisma.setting.findMany({ where: { tenant } })
   const map: SettingsMap = { ...DEFAULT_SETTINGS }
   for (const r of rows) map[r.key] = r.value
   return map

@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { ensureFresh } from './demo'
+import { ensureBase, readTenant, BASE } from './demo'
 import { getSettings, toSite } from './settings'
 
 export type SoinT = { id: number; categoryId: number; name: string; desc: string; min: number; price: number; signature: boolean; isNew: boolean }
@@ -10,20 +10,24 @@ export type TakenSlot = { date: string; time: string; staff: string }
 
 /** Toutes les données de la page d'accueil, lues en base (après vérification de fraîcheur de la démo). */
 export async function getSiteData() {
-  await ensureFresh()
+  await ensureBase()
+  const tenant = await readTenant()
+  const w = { tenant }
   const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Paris' }))
   const from = today.toISOString().slice(0, 10)
   const [settings, categories, rituels, team, gallery, reviews, faq, bookings] = await Promise.all([
-    getSettings(),
-    prisma.category.findMany({ where: { visible: true }, orderBy: { order: 'asc' }, include: { soins: { where: { visible: true }, orderBy: { order: 'asc' } } } }),
-    prisma.rituel.findMany({ where: { visible: true }, orderBy: { order: 'asc' } }),
-    prisma.teamMember.findMany({ where: { visible: true }, orderBy: { order: 'asc' } }),
-    prisma.galleryItem.findMany({ where: { visible: true }, orderBy: { order: 'asc' } }),
-    prisma.review.findMany({ where: { visible: true }, orderBy: { order: 'asc' } }),
-    prisma.faqItem.findMany({ where: { visible: true }, orderBy: { order: 'asc' } }),
-    prisma.booking.findMany({ where: { status: 'confirmed', date: { gte: from } }, select: { date: true, time: true, staff: true } }),
+    getSettings(tenant),
+    prisma.category.findMany({ where: { ...w, visible: true }, orderBy: { order: 'asc' }, include: { soins: { where: { visible: true }, orderBy: { order: 'asc' } } } }),
+    prisma.rituel.findMany({ where: { ...w, visible: true }, orderBy: { order: 'asc' } }),
+    prisma.teamMember.findMany({ where: { ...w, visible: true }, orderBy: { order: 'asc' } }),
+    prisma.galleryItem.findMany({ where: { ...w, visible: true }, orderBy: { order: 'asc' } }),
+    prisma.review.findMany({ where: { ...w, visible: true }, orderBy: { order: 'asc' } }),
+    prisma.faqItem.findMany({ where: { ...w, visible: true }, orderBy: { order: 'asc' } }),
+    prisma.booking.findMany({ where: { ...w, status: 'confirmed', date: { gte: from } }, select: { date: true, time: true, staff: true } }),
   ])
   return {
+    tenant,
+    personal: tenant !== BASE,
     site: toSite(settings),
     categories: categories.filter((c) => c.soins.length > 0) as CategoryT[],
     rituels: rituels as RituelT[],

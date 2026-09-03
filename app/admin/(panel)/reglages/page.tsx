@@ -1,3 +1,4 @@
+import { requireSession } from '@/lib/auth'
 import { getSettings } from '@/lib/settings'
 import { SettingsForm, type SettingsGroup } from '@/components/admin/SettingsForm'
 import { PageHeader } from '@/components/admin/ui'
@@ -65,7 +66,8 @@ const GROUPS: SettingsGroup[] = [
 ]
 
 export default async function ReglagesPage() {
-  const settings = await getSettings()
+  const { tenant } = await requireSession()
+  const settings = await getSettings(tenant)
   return (
     <div>
       <PageHeader title="Réglages & textes" description="Coordonnées, titres, offre du moment : tout ce qui n’est pas une liste se modifie ici." />

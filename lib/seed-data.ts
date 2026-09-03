@@ -3,6 +3,9 @@
  */
 import type { HoursConfigRow } from './hours'
 
+/** À incrémenter quand les données ci-dessous changent : la version d'origine est alors recréée au déploiement. */
+export const SEED_VERSION = '2026-09-03.1'
+
 export const DEFAULT_HOURS: HoursConfigRow[] = [
   { day: 1, closed: true, open: '09:30', close: '19:00' },
   { day: 2, closed: false, open: '09:30', close: '19:00' },

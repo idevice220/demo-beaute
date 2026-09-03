@@ -12,6 +12,7 @@
     "db:deploy": "prisma migrate deploy"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.22.0",
     "jose": "^5.9.6",
     "lucide-react": "^0.460.0",

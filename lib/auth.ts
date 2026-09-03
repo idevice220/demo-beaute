@@ -1,5 +1,6 @@
 import { SignJWT, jwtVerify, type JWTPayload } from 'jose'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 export const COOKIE_NAME = 'owner-token'
 const MAX_AGE = 60 * 60 * 24 * 7 // 7 jours
@@ -12,15 +13,17 @@ function secret() {
   return new TextEncoder().encode(process.env.JWT_SECRET || 'dev-secret-lecrin')
 }
 
-export type Session = JWTPayload & { email: string }
+export type Session = JWTPayload & { email: string; tenant: string }
 
-export async function signToken(email: string) {
-  return new SignJWT({ email }).setProtectedHeader({ alg: 'HS256' }).setSubject(email).setIssuedAt().setExpirationTime('7d').sign(secret())
+/** Jeton lié à la copie privée du visiteur : l'espace propriétaire ne touche jamais une autre copie. */
+export async function signToken(email: string, tenant: string) {
+  return new SignJWT({ email, tenant }).setProtectedHeader({ alg: 'HS256' }).setSubject(tenant).setIssuedAt().setExpirationTime('7d').sign(secret())
 }
 
 export async function verifyToken(token: string): Promise<Session | null> {
   try {
     const { payload } = await jwtVerify(token, secret())
+    if (typeof payload.tenant !== 'string' || !payload.tenant) return null
     return payload as Session
   } catch {
     return null
@@ -32,6 +35,13 @@ export async function getSession(): Promise<Session | null> {
   const token = cookies().get(COOKIE_NAME)?.value
   if (!token) return null
   return verifyToken(token)
+}
+
+/** Session obligatoire dans une page d'administration. */
+export async function requireSession(): Promise<Session> {
+  const s = await getSession()
+  if (!s) redirect('/admin/login')
+  return s
 }
 
 export function cookieOptions() {

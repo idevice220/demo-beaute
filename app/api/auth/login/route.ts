@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { DEMO_EMAIL, DEMO_PASSWORD, signToken, cookieOptions, COOKIE_NAME } from '@/lib/auth'
+import { getOrCreateTenant } from '@/lib/demo'
 
+/** Connexion démo : crée (ou retrouve) la copie privée du visiteur et lie le jeton à cette copie. */
 export async function POST(req: Request) {
   let body: { email?: string; password?: string }
   try {
@@ -14,6 +16,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Identifiants incorrects' }, { status: 401 })
   }
   const res = NextResponse.json({ ok: true, email })
-  res.cookies.set(COOKIE_NAME, await signToken(email), cookieOptions())
+  const tenant = await getOrCreateTenant(res)
+  res.cookies.set(COOKIE_NAME, await signToken(email, tenant), cookieOptions())
   return res
 }

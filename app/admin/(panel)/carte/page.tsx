@@ -1,13 +1,15 @@
 import { prisma } from '@/lib/prisma'
+import { requireSession } from '@/lib/auth'
 import { Collection } from '@/components/admin/Collection'
 import { PageHeader } from '@/components/admin/ui'
 
 export const dynamic = 'force-dynamic'
 
 export default async function CartePage() {
+  const { tenant } = await requireSession()
   const [categories, soins] = await Promise.all([
-    prisma.category.findMany({ orderBy: { order: 'asc' } }),
-    prisma.soin.findMany({ orderBy: { order: 'asc' } }),
+    prisma.category.findMany({ where: { tenant }, orderBy: { order: 'asc' } }),
+    prisma.soin.findMany({ where: { tenant }, orderBy: { order: 'asc' } }),
   ])
   const catOptions = categories.map((c) => ({ value: c.id, label: c.name }))
   return (

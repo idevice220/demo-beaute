@@ -16,6 +16,7 @@ import { Footer } from '@/components/Footer'
 import { Booking } from '@/components/Booking'
 import { MobileBar } from '@/components/MobileBar'
 import { DemoBadge } from '@/components/DemoBadge'
+import { TenantBar } from '@/components/TenantBar'
 
 // Tout le contenu vient de la base (espace propriétaire) : rendu à chaque requête.
 export const dynamic = 'force-dynamic'
@@ -24,6 +25,7 @@ export default async function Home() {
   const d = await getSiteData()
   return (
     <>
+      {d.personal && <TenantBar />}
       <Header site={d.site} />
       <main>
         <Hero site={d.site} />

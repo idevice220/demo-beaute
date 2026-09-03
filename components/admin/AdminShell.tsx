@@ -12,15 +12,15 @@ import { Confirm, cls } from './ui'
 
 export type NavItem = { href: string; label: string; icon: string; exact?: boolean; count?: number; section?: string }
 
-export function AdminShell({ brand, nav, email, resetAt, children }: { brand: { name: string; sub: string; initial: string }; nav: NavItem[]; email: string; resetAt: string; children: ReactNode }) {
+export function AdminShell({ brand, nav, email, tenantSince, ttlHours, children }: { brand: { name: string; sub: string; initial: string }; nav: NavItem[]; email: string; tenantSince: string; ttlHours: number; children: ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [confirm, setConfirm] = useState(false)
   const [busy, setBusy] = useState(false)
 
-  const resetIn = Math.max(0, Math.round((new Date(resetAt).getTime() - Date.now()) / 60_000))
-  const resetLabel = resetIn >= 60 ? `${Math.floor(resetIn / 60)} h ${String(resetIn % 60).padStart(2, '0')}` : `${resetIn} min`
+  const sinceMin = Math.max(0, Math.round((Date.now() - new Date(tenantSince).getTime()) / 60_000))
+  const sinceLabel = sinceMin < 1 ? 'à l’instant' : sinceMin < 60 ? `il y a ${sinceMin} min` : `il y a ${Math.floor(sinceMin / 60)} h`
 
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' })
@@ -32,7 +32,7 @@ export function AdminShell({ brand, nav, email, resetAt, children }: { brand: { 
     try {
       const res = await fetch('/api/admin/reset', { method: 'POST' })
       if (!res.ok) throw new Error()
-      toast.success('Démo réinitialisée : toutes les données sont revenues à l’état initial')
+      toast.success('Votre copie est revenue à l’état initial')
       setConfirm(false)
       router.refresh()
     } catch {
@@ -72,10 +72,10 @@ export function AdminShell({ brand, nav, email, resetAt, children }: { brand: { 
       </nav>
       <div className="border-t border-white/10 p-3">
         <div className="mb-2 rounded-xl bg-white/5 px-3 py-2.5 text-xs text-white/60">
-          <p className="inline-flex items-center gap-1.5 font-semibold text-white/80"><Sparkles size={13} className="text-[var(--a)]" /> Espace de démonstration</p>
-          <p className="mt-1">Remise à zéro automatique dans {resetLabel}.</p>
+          <p className="inline-flex items-center gap-1.5 font-semibold text-white/80"><Sparkles size={13} className="text-[var(--a)]" /> Votre copie de la démo</p>
+          <p className="mt-1">Créée {sinceLabel}. Vos changements ne sont visibles que par vous ; la copie s’efface après {ttlHours} h sans activité.</p>
         </div>
-        <button onClick={() => setConfirm(true)} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/75 hover:bg-white/10 hover:text-white"><RotateCcw size={16} /> Réinitialiser la démo</button>
+        <button onClick={() => setConfirm(true)} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/75 hover:bg-white/10 hover:text-white"><RotateCcw size={16} /> Réinitialiser ma copie</button>
         <a href="/" target="_blank" rel="noopener noreferrer" className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/75 hover:bg-white/10 hover:text-white"><ExternalLink size={16} /> Voir le site</a>
         <button onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/75 hover:bg-white/10 hover:text-white"><LogOut size={16} /> Déconnexion</button>
         <p className="mt-2 truncate px-3 text-[11px] text-white/35">{email}</p>
@@ -109,7 +109,7 @@ export function AdminShell({ brand, nav, email, resetAt, children }: { brand: { 
         <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">{children}</main>
       </div>
 
-      <Confirm open={confirm} title="Réinitialiser la démo ?" text="Toutes les modifications faites dans cet espace (et par d’autres visiteurs) seront effacées, les données de démonstration reviendront." confirmLabel="Réinitialiser" onConfirm={reset} onCancel={() => setConfirm(false)} loading={busy} />
+      <Confirm open={confirm} title="Réinitialiser ma copie ?" text="Toutes vos modifications seront effacées et les données de démonstration reviendront. Les autres visiteurs ne sont pas concernés : chacun a sa propre copie." confirmLabel="Réinitialiser" onConfirm={reset} onCancel={() => setConfirm(false)} loading={busy} />
     </div>
   )
 }

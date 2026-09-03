@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { CalendarCheck, Gift, Mail, Star, Clock, ArrowRight, Scissors, Users, Sparkle, Smartphone, Euro } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { getSettings, toSite } from '@/lib/settings'
+import { requireSession } from '@/lib/auth'
 import { getStatus, parisNow } from '@/lib/hours'
 import { Card, Badge } from '@/components/admin/ui'
 
@@ -10,19 +11,20 @@ export const dynamic = 'force-dynamic'
 const toDate = (s: string) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d) }
 
 export default async function DashboardPage() {
+  const { tenant } = await requireSession()
   const now = parisNow()
   const today = now.toISOString().slice(0, 10)
   const week = new Date(now); week.setDate(week.getDate() + 7)
   const weekStr = week.toISOString().slice(0, 10)
   const [settings, todays, upcomingWeek, newGifts, subscribers, soins, reviews, next] = await Promise.all([
-    getSettings(),
-    prisma.booking.findMany({ where: { status: 'confirmed', date: today } }),
-    prisma.booking.findMany({ where: { status: 'confirmed', date: { gte: today, lte: weekStr } } }),
-    prisma.giftOrder.count({ where: { status: 'new' } }),
-    prisma.subscriber.count(),
-    prisma.soin.count({ where: { visible: true } }),
-    prisma.review.count({ where: { visible: true } }),
-    prisma.booking.findMany({ where: { status: 'confirmed', date: { gte: today } }, orderBy: [{ date: 'asc' }, { time: 'asc' }], take: 6 }),
+    getSettings(tenant),
+    prisma.booking.findMany({ where: { tenant,  status: 'confirmed', date: today } }),
+    prisma.booking.findMany({ where: { tenant,  status: 'confirmed', date: { gte: today, lte: weekStr } } }),
+    prisma.giftOrder.count({ where: { tenant,  status: 'new' } }),
+    prisma.subscriber.count({ where: { tenant } }),
+    prisma.soin.count({ where: { tenant,  visible: true } }),
+    prisma.review.count({ where: { tenant,  visible: true } }),
+    prisma.booking.findMany({ where: { tenant,  status: 'confirmed', date: { gte: today } }, orderBy: [{ date: 'asc' }, { time: 'asc' }], take: 6 }),
   ])
   const site = toSite(settings)
   const status = getStatus(site.hours, now)
