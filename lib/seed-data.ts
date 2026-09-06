@@ -4,7 +4,7 @@
 import type { HoursConfigRow } from './hours'
 
 /** À incrémenter quand les données ci-dessous changent : la version d'origine est alors recréée au déploiement. */
-export const SEED_VERSION = '2026-09-03.1'
+export const SEED_VERSION = '2026-09-06.1'
 
 export const DEFAULT_HOURS: HoursConfigRow[] = [
   { day: 1, closed: true, open: '09:30', close: '19:00' },
@@ -19,19 +19,19 @@ export const DEFAULT_HOURS: HoursConfigRow[] = [
 export const DEFAULT_SETTINGS: Record<string, string> = {
   name: 'L’Écrin',
   tagline: 'Institut de beauté',
-  city: 'Le Raincy',
-  phone: '01 98 76 54 32',
+  city: 'Paris',
+  phone: '01 99 00 45 67',
   email: 'bonjour@lecrin-beaute.fr',
-  address: '12 avenue de la Résistance, 93340 Le Raincy',
-  maps: 'https://www.google.com/maps/search/?api=1&query=12+avenue+de+la+R%C3%A9sistance+93340+Le+Raincy',
+  address: '12 rue Oberkampf, 75011 Paris',
+  maps: 'https://www.google.com/maps/search/?api=1&query=12+rue+Oberkampf+75011+Paris',
   instagram: '#',
-  instagram_handle: '@lecrin.leraincy',
+  instagram_handle: '@lecrin.paris',
   rating: '4.9',
   reviews_count: '212',
   since: '2015',
   hero_title: 'Prenez soin de vous,',
   hero_accent: 'vraiment.',
-  hero_text: 'Un cocon au cœur du Raincy. Soins visage, massages, épilation, mains et regard, réalisés par trois praticiennes qui prennent le temps.',
+  hero_text: 'Un cocon au cœur de Paris. Soins visage, massages, épilation, mains et regard, réalisés par trois praticiennes qui prennent le temps.',
   hero_image: '/images/hero.jpg',
   hero_card_title: 'Cabine duo',
   hero_card_text: 'et tisanerie pour prolonger',
@@ -43,8 +43,8 @@ export const DEFAULT_SETTINGS: Record<string, string> = {
   fidelity_on: 'true',
   fidelity_title: 'Le 10e soin est offert.',
   fidelity_text: 'Votre carte se remplit toute seule à chaque rendez-vous, sans rien à présenter. Et quand vous parrainez une amie, vous recevez chacune 15 € sur le prochain soin.',
-  access_train: 'RER E « Le Raincy – Villemomble », 3 min à pied',
-  access_parking: 'Stationnement gratuit dans l’avenue',
+  access_train: 'Métro Oberkampf (lignes 5 et 9), 3 min à pied',
+  access_parking: 'Parking Saint-Sébastien à 5 min, Vélib’ devant l’institut',
   footer_text: 'Soins visage, corps, épilation, mains et regard. Réservation en ligne 24h/24, cartes cadeaux, cabine duo.',
   newsletter_title: 'Une fois par mois, nos conseils beauté et nos offres en avant-première.',
   hours: JSON.stringify(DEFAULT_HOURS),
@@ -118,7 +118,7 @@ export const FAQ = [
   { q: 'Que dois-je prévoir avant un soin visage ?', a: 'Rien de particulier. Venez sans maquillage si possible, et 5 minutes en avance pour profiter d’une tisane.' },
   { q: 'Les cartes cadeaux ont-elles une date limite ?', a: 'Elles sont valables 12 mois, sur tous les soins et produits. Elles sont envoyées par e-mail immédiatement ou dans un joli écrin à retirer à l’institut.' },
   { q: 'Acceptez-vous les hommes ?', a: 'Bien sûr : massages, soins visage et épilation. Un tiers de nos clients sont des hommes.' },
-  { q: 'Y a-t-il un parking ?', a: 'Places gratuites avenue de la Résistance et parking de la gare RER à 3 minutes à pied.' },
+  { q: 'Y a-t-il un parking ?', a: 'Le parking Saint-Sébastien-Froissart est à 5 minutes à pied, et une station Vélib’ se trouve juste devant l’institut.' },
 ]
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -133,15 +133,15 @@ const ago = (h: number) => new Date(Date.now() - h * 3_600_000)
 
 /** Rendez-vous déjà pris, pour que l'agenda de la démo soit vivant. */
 export const BOOKINGS = [
-  { item: 'Rituel hydratation profonde', staff: 'Camille', date: dayPlus(0), time: '10:00', duration: 60, price: 79, name: 'Élodie Rousseau', email: 'elodie.r@exemple.fr', phone: '06 12 45 78 90', note: null, status: 'confirmed', createdAt: ago(30) },
-  { item: 'Pose semi-permanent', staff: 'Inès', date: dayPlus(0), time: '11:30', duration: 45, price: 42, name: 'Nadia Khelifi', email: 'nadia.k@exemple.fr', phone: '06 98 76 54 32', note: 'Teinte nude si possible', status: 'confirmed', createdAt: ago(52) },
-  { item: 'Rituel pierres chaudes', staff: 'Léa', date: dayPlus(0), time: '15:00', duration: 75, price: 95, name: 'Claire Morel', email: 'claire.m@exemple.fr', phone: '06 45 32 10 98', note: null, status: 'confirmed', createdAt: ago(6) },
-  { item: 'Rehaussement de cils', staff: 'Inès', date: dayPlus(1), time: '10:30', duration: 60, price: 65, name: 'Sarah Benali', email: 'sarah.b@exemple.fr', phone: '07 11 22 33 44', note: null, status: 'confirmed', createdAt: ago(20) },
-  { item: 'Moment à deux', staff: 'Sans préférence', date: dayPlus(1), time: '17:00', duration: 75, price: 169, name: 'Julie & Marc Petit', email: 'julie.p@exemple.fr', phone: '06 77 88 99 00', note: 'Cadeau d’anniversaire, merci de ne rien dire !', status: 'confirmed', createdAt: ago(1) },
-  { item: 'Massage relaxant', staff: 'Léa', date: dayPlus(2), time: '14:00', duration: 60, price: 75, name: 'Thomas Girard', email: 'thomas.g@exemple.fr', phone: '06 55 44 33 22', note: null, status: 'confirmed', createdAt: ago(3) },
-  { item: 'Soin éclat coup d’éclat', staff: 'Camille', date: dayPlus(3), time: '16:30', duration: 45, price: 55, name: 'Manon Lefèvre', email: 'manon.l@exemple.fr', phone: '06 10 20 30 40', note: null, status: 'confirmed', createdAt: ago(0.5) },
-  { item: 'Jambes complètes', staff: 'Inès', date: dayPlus(-2), time: '09:30', duration: 30, price: 32, name: 'Inaya Diallo', email: 'inaya.d@exemple.fr', phone: '06 31 41 51 61', note: null, status: 'done', createdAt: ago(90) },
-  { item: 'Brow lift', staff: 'Inès', date: dayPlus(-1), time: '18:00', duration: 45, price: 55, name: 'Camille Dubois', email: 'cam.d@exemple.fr', phone: '06 71 81 91 01', note: null, status: 'cancelled', createdAt: ago(70) },
+  { item: 'Rituel hydratation profonde', staff: 'Camille', date: dayPlus(0), time: '10:00', duration: 60, price: 79, name: 'Élodie Rousseau', email: 'elodie.r@exemple.fr', phone: '06 39 98 78 90', note: null, status: 'confirmed', createdAt: ago(30) },
+  { item: 'Pose semi-permanent', staff: 'Inès', date: dayPlus(0), time: '11:30', duration: 45, price: 42, name: 'Nadia Khelifi', email: 'nadia.k@exemple.fr', phone: '06 39 98 54 32', note: 'Teinte nude si possible', status: 'confirmed', createdAt: ago(52) },
+  { item: 'Rituel pierres chaudes', staff: 'Léa', date: dayPlus(0), time: '15:00', duration: 75, price: 95, name: 'Claire Morel', email: 'claire.m@exemple.fr', phone: '06 39 98 10 98', note: null, status: 'confirmed', createdAt: ago(6) },
+  { item: 'Rehaussement de cils', staff: 'Inès', date: dayPlus(1), time: '10:30', duration: 60, price: 65, name: 'Sarah Benali', email: 'sarah.b@exemple.fr', phone: '06 39 98 33 44', note: null, status: 'confirmed', createdAt: ago(20) },
+  { item: 'Moment à deux', staff: 'Sans préférence', date: dayPlus(1), time: '17:00', duration: 75, price: 169, name: 'Julie & Marc Petit', email: 'julie.p@exemple.fr', phone: '06 39 98 99 00', note: 'Cadeau d’anniversaire, merci de ne rien dire !', status: 'confirmed', createdAt: ago(1) },
+  { item: 'Massage relaxant', staff: 'Léa', date: dayPlus(2), time: '14:00', duration: 60, price: 75, name: 'Thomas Girard', email: 'thomas.g@exemple.fr', phone: '06 39 98 33 22', note: null, status: 'confirmed', createdAt: ago(3) },
+  { item: 'Soin éclat coup d’éclat', staff: 'Camille', date: dayPlus(3), time: '16:30', duration: 45, price: 55, name: 'Manon Lefèvre', email: 'manon.l@exemple.fr', phone: '06 39 98 30 40', note: null, status: 'confirmed', createdAt: ago(0.5) },
+  { item: 'Jambes complètes', staff: 'Inès', date: dayPlus(-2), time: '09:30', duration: 30, price: 32, name: 'Inaya Diallo', email: 'inaya.d@exemple.fr', phone: '06 39 98 51 61', note: null, status: 'done', createdAt: ago(90) },
+  { item: 'Brow lift', staff: 'Inès', date: dayPlus(-1), time: '18:00', duration: 45, price: 55, name: 'Camille Dubois', email: 'cam.d@exemple.fr', phone: '06 39 98 91 01', note: null, status: 'cancelled', createdAt: ago(70) },
 ]
 
 export const GIFTS = [

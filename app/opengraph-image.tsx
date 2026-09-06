@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const alt = 'L’Écrin — Institut de beauté au Raincy (93)'
+export const alt = 'L’Écrin — Institut de beauté à Paris 11e'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -13,7 +13,7 @@ export default async function Image() {
             <div style={{ display: 'flex', width: 56, height: 56, borderRadius: 999, background: '#2E3F36', marginRight: 16 }} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', fontSize: 34, fontWeight: 500 }}>L’Écrin</div>
-              <div style={{ display: 'flex', fontSize: 14, letterSpacing: 5, color: '#C4715A', fontFamily: 'sans-serif' }}>INSTITUT DE BEAUTÉ · LE RAINCY</div>
+              <div style={{ display: 'flex', fontSize: 14, letterSpacing: 5, color: '#C4715A', fontFamily: 'sans-serif' }}>INSTITUT DE BEAUTÉ · PARIS 11E</div>
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>

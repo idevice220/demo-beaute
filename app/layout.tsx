@@ -7,12 +7,12 @@ const display = Fraunces({ weight: ['300', '400', '500', '600'], style: ['normal
 const sans = Jost({ weight: ['300', '400', '500', '600'], subsets: ['latin'], variable: '--font-sans', display: 'swap' })
 
 export const metadata: Metadata = {
-  title: 'L’Écrin — Institut de beauté au Raincy (93) · Réservation en ligne',
+  title: 'L’Écrin — Institut de beauté à Paris 11e · Réservation en ligne',
   description:
-    'Soins visage, massages, épilation, manucure et regard dans un cocon au Raincy. Réservez en ligne en 30 secondes, offrez une carte cadeau. Site de démonstration NEX-WEB.',
+    'Soins visage, massages, épilation, manucure et regard dans un cocon à Paris, près d’Oberkampf. Réservez en ligne en 30 secondes, offrez une carte cadeau. Site de démonstration NEX-WEB.',
   metadataBase: new URL('https://demo-beaute.nex-web.fr'),
   openGraph: {
-    title: 'L’Écrin — Institut de beauté au Raincy (93)',
+    title: 'L’Écrin — Institut de beauté à Paris 11e',
     description: 'Soins visage, massages, épilation, manucure. Réservation en ligne, cartes cadeaux. Site de démonstration NEX-WEB.',
     type: 'website',
     locale: 'fr_FR',

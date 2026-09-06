@@ -19,7 +19,7 @@ const GROUPS: SettingsGroup[] = [
       { key: 'address', label: 'Adresse', type: 'text' },
       { key: 'maps', label: 'Lien Google Maps (itinéraire)', type: 'text' },
       { key: 'instagram', label: 'Lien Instagram', type: 'text', half: true, placeholder: 'https://instagram.com/…' },
-      { key: 'instagram_handle', label: 'Pseudo Instagram affiché', type: 'text', half: true, placeholder: '@lecrin.leraincy' },
+      { key: 'instagram_handle', label: 'Pseudo Instagram affiché', type: 'text', half: true, placeholder: '@lecrin.paris' },
     ],
   },
   {

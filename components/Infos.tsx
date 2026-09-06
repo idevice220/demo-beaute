@@ -8,7 +8,7 @@ export function Infos({ site }: { site: Site }) {
   return (
     <section id="infos" className="bg-sand py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-4">
-        <SectionHeading eyebrow="Horaires & accès" title={<>À deux pas de la gare, <em className="italic text-terra">au calme.</em></>} />
+        <SectionHeading eyebrow="Horaires & accès" title={<>À deux pas du métro, <em className="italic text-terra">au calme.</em></>} />
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <Reveal>
             <div className="rounded-3xl bg-cream p-7 shadow-soft">
@@ -34,19 +34,19 @@ export function Infos({ site }: { site: Site }) {
           </Reveal>
           <Reveal delay={100}>
             <div className="relative h-full min-h-[360px] overflow-hidden rounded-3xl border hairline bg-sand-2 shadow-soft">
-              <svg viewBox="0 0 600 420" className="absolute inset-0 h-full w-full" role="img" aria-label="Plan schématique : l’institut avenue de la Résistance, à 3 minutes de la gare RER E du Raincy">
+              <svg viewBox="0 0 600 420" className="absolute inset-0 h-full w-full" role="img" aria-label="Plan schématique : l’institut rue Oberkampf, à 3 minutes du métro Oberkampf du Raincy">
                 <rect width="600" height="420" fill="#EAE0D3" />
                 {[[20,20,150,110],[200,20,180,110],[410,20,170,110],[20,160,150,110],[410,160,170,110],[20,300,150,100],[200,300,180,100],[410,300,170,100]].map(([x,y,w,h]) => (
                   <rect key={`${x}-${y}`} x={x} y={y} width={w} height={h} rx="10" fill="#F3ECE2" />
                 ))}
                 <path d="M0 145 H600 M0 285 H600 M185 0 V420 M395 0 V420" stroke="#FBF8F3" strokeWidth="14" fill="none" />
                 <path d="M185 145 L395 285" stroke="#FBF8F3" strokeWidth="10" fill="none" />
-                <text x="300" y="139" textAnchor="middle" fontSize="11" fill="#7A6E68" letterSpacing="1.5">AVENUE DE LA RÉSISTANCE</text>
-                <text x="178" y="60" fontSize="11" fill="#7A6E68" letterSpacing="1.5" transform="rotate(-90 178 60)" textAnchor="end">BD DU MIDI</text>
+                <text x="300" y="139" textAnchor="middle" fontSize="11" fill="#7A6E68" letterSpacing="1.5">RUE OBERKAMPF</text>
+                <text x="178" y="60" fontSize="11" fill="#7A6E68" letterSpacing="1.5" transform="rotate(-90 178 60)" textAnchor="end">BD VOLTAIRE</text>
                 <path d="M0 360 C120 350 220 372 320 362 S520 340 600 350" stroke="#2E3F36" strokeWidth="4" strokeDasharray="10 7" fill="none" />
                 <circle cx="330" cy="362" r="9" fill="#2E3F36" />
                 <circle cx="330" cy="362" r="4" fill="#FBF8F3" />
-                <text x="345" y="367" fontSize="12" fill="#2E3F36" fontWeight="600">Gare RER E · Le Raincy-Villemomble</text>
+                <text x="345" y="367" fontSize="12" fill="#2E3F36" fontWeight="600">Métro Oberkampf · lignes 5 & 9</text>
                 <path d="M330 350 C320 320 305 300 300 230" stroke="#C4715A" strokeWidth="3" strokeDasharray="4 6" fill="none" />
                 <text x="312" y="300" fontSize="11" fill="#C4715A" fontWeight="600">3 min à pied</text>
                 <g transform="translate(300 215)">
@@ -55,10 +55,10 @@ export function Infos({ site }: { site: Site }) {
                   <circle cy="-4" r="7" fill="#FBF8F3" />
                 </g>
                 <rect x="198" y="245" width="204" height="30" rx="15" fill="#2E3F36" />
-                <text x="300" y="264" textAnchor="middle" fontSize="12" fill="#FBF8F3" fontWeight="600">{site.name} · 12 av. de la Résistance</text>
+                <text x="300" y="264" textAnchor="middle" fontSize="12" fill="#FBF8F3" fontWeight="600">{site.name} · 12 rue Oberkampf</text>
                 <rect x="470" y="180" width="26" height="26" rx="6" fill="#2E3F36" />
                 <text x="483" y="198" textAnchor="middle" fontSize="14" fill="#FBF8F3" fontWeight="700">P</text>
-                <text x="470" y="222" fontSize="10" fill="#7A6E68">gratuit</text>
+                <text x="470" y="222" fontSize="10" fill="#7A6E68">à 5 min</text>
               </svg>
               <span className="absolute bottom-3 left-3 rounded-full bg-cream/90 px-3 py-1 text-xs text-muted">Plan schématique</span>
             </div>
