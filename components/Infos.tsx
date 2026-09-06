@@ -34,7 +34,7 @@ export function Infos({ site }: { site: Site }) {
           </Reveal>
           <Reveal delay={100}>
             <div className="relative h-full min-h-[360px] overflow-hidden rounded-3xl border hairline bg-sand-2 shadow-soft">
-              <svg viewBox="0 0 600 420" className="absolute inset-0 h-full w-full" role="img" aria-label="Plan schématique : l’institut rue Oberkampf, à 3 minutes du métro Oberkampf du Raincy">
+              <svg viewBox="0 0 600 420" className="absolute inset-0 h-full w-full" role="img" aria-label="Plan schématique : l’institut rue Oberkampf, à 3 minutes du métro Oberkampf">
                 <rect width="600" height="420" fill="#EAE0D3" />
                 {[[20,20,150,110],[200,20,180,110],[410,20,170,110],[20,160,150,110],[410,160,170,110],[20,300,150,100],[200,300,180,100],[410,300,170,100]].map(([x,y,w,h]) => (
                   <rect key={`${x}-${y}`} x={x} y={y} width={w} height={h} rx="10" fill="#F3ECE2" />
